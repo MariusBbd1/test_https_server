@@ -23,7 +23,6 @@ Le fichier devrais contenir les fichiers suivants: `Program.cs`, `HttpsServer.cs
     ```  
   - **Windows** : installez “Win32/Win64 OpenSSL” (par exemple via [slproweb.com](https://slproweb.com/products/Win32OpenSSL.html)), qui fournit un installeur simple pour OpenSSL sous Windows. Vous pouvez aussi utiliser [chocolatey](https://chocolatey.org/) si disponible, ou tout autre gestionnaire de paquets Windows.
 
-*(Note : les scripts fournis s’occupent d’installer ces outils ou vous indiqueront s’ils manquent.)*
 
 ## Génération du certificat HTTPS
 
@@ -52,25 +51,8 @@ Vous devriez voir le message **“Now listening on: https://localhost:8443”**.
 
 Dans un navigateur, ouvrez <https://localhost:8443>. Le navigateur affichera probablement un avertissement de sécurité (certificat auto-signé), confirmez pour continuer : vous devriez voir la réponse du serveur, c'est à dire une page web avec uniquement le texte "server running https using kestrel" sans mis en forme.
 
-## Scripts de déploiement
 
-Pour faciliter l’installation et le lancement, des scripts sont fournis :
-
-- **Linux (Ubuntu)** – fichier `setup.sh` (rendez-le exécutable avec `chmod +x setup.sh`) :  
-  Ce script installe .NET et OpenSSL si nécessaire, génère le certificat, puis lance `dotnet run`.  
-- **Windows** – fichier `setup.bat` (ou `setup.ps1`) :  
-  Ce script vérifie la présence de .NET et OpenSSL (ou demande l’installation manuelle), génère le certificat, puis lance `dotnet run`.  
-
-Pour lancer le script sous Linux, lancez dans un terminal dans le dossier : 
-
-```bash
-chmod +x setup.sh
-./setup.sh
-```
-
-Et sous Windows, double-cliquez sur `setup.bat` ou lancez-le dans PowerShell. Ces scripts automatisent l’installation des dépendances et le démarrage, pour tester rapidement sur chaque OS.
-
-## Publiés et fichiers exécutables (optionnel)
+## fichiers exécutables (optionnel)
 
 Pour obtenir un exécutable self contained vous pouvez utiliser :
 Sur Linux :
@@ -81,4 +63,4 @@ Sur Windows :
 ```bash
 dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
 ```
-Cela produit un binaire unique exécutable directement après avoir placé le certificat dans le dossier nouvellement généré.
+Cela produit un binaire unique exécutable directement après avoir placé le certificat dans le dossier nouvellement généré (bin/Release/win-x64 ou linux-x64/publish).
