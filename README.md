@@ -10,6 +10,10 @@ Le fichier devrais contenir les fichiers suivants: `Program.cs`, `HttpsServer.cs
 - **.NET SDK 8.0** (ou plus récent). Installez-le selon votre OS :
   - **Linux (testé sur VM Ubuntu)** : ouvrez un terminal et exécutez :  
     ```bash
+    wget https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+    sudo dpkg -i packages-microsoft-prod.deb
+    rm packages-microsoft-prod.deb
+    
     sudo apt update
     sudo apt install -y dotnet-sdk-8.0
     ```  
