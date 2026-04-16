@@ -31,15 +31,29 @@ Le fichier devrais contenir les fichiers suivants: `Program.cs`, `HttpsServer.cs
 ## Génération du certificat HTTPS
 
 Un certificat auto-signé est requis pour le serveur HTTPS. 
-Le certificat que j'ai généré est fourni et devrais fonctionner, mais si vous voulez créer votre propre certificat, placez-vous dans le dossier du projet et exécutez les commandes suivantes dans un terminal (Linux) ou PowerShell (Windows) :
+Le certificat que j'ai généré est fourni et devrais fonctionner, mais si vous voulez créer votre propre certificat, placez-vous dans le dossier du projet et exécutez les commandes suivantes dans un terminal (Linux) ou PowerShell (Windows) avec openssl installé:
 
 ```bash
 openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes -subj "/CN=localhost"
 openssl pkcs12 -export -out cert.pfx -inkey key.pem -in cert.pem -passout pass:password
 ```
-
 - Le premier `openssl req` génère une clé privée `key.pem` et un certificat `cert.pem` valides 1 an avec `CN=localhost`.  
-- Le second convertit ces fichiers en un fichier PKCS#12 `cert.pfx` protégé par le mot de passe `password` (mot de passe utilisé dans le code).  
+- Le second convertit ces fichiers en un fichier PKCS#12 `cert.pfx` protégé par le mot de passe `password` (mot de passe utilisé dans le code).
+
+optionnellement sur Windows on peux générer un certificat auto-signé directement:
+```bash
+$cert = New-SelfSignedCertificate `
+  -DnsName "localhost" `
+  -CertStoreLocation "Cert:\CurrentUser\My" `
+  -NotAfter (Get-Date).AddYears(1)
+
+$password = ConvertTo-SecureString "password" -AsPlainText -Force
+
+Export-PfxCertificate `
+  -Cert $cert `
+  -FilePath "cert.pfx" `
+  -Password $password
+```
 
 Après cette étape, vous aurez `cert.pfx` dans le dossier du projet.
 
@@ -53,8 +67,7 @@ dotnet run
 
 Vous devriez voir le message **“Now listening on: https://localhost:8443”**. Le serveur est alors actif sur le port 8443 en HTTPS. 
 
-Dans un navigateur, ouvrez <https://localhost:8443>. Le navigateur affichera probablement un avertissement de sécurité (certificat auto-signé), confirmez pour continuer : vous devriez voir la réponse du serveur, c'est à dire une page web avec uniquement le texte "server running https using kestrel" sans mis en forme.
-
+Dans un navigateur, ouvrez <https://localhost:8443>. Le navigateur affichera probablement un avertissement de sécurité (certificat auto-signé), confirmez pour continuer : vous devriez voir la réponse du serveur, c'est à dire une page web avec uniquement le texte "Server running https using kestrel" sans mis en forme.
 
 ## fichiers exécutables (optionnel)
 
